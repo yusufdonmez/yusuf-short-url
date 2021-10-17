@@ -1,0 +1,9 @@
+stages:
+   - build
+
+job_build:
+    stage: build
+    script:
+     - echo 'build'
+     - mvn verify
+     - sudo cp target/shortener-0.0.1-jar-with-dependencies.jar /opt/gitlab-builds/oto-shortener.jar

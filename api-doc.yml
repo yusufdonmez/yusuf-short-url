@@ -1,0 +1,68 @@
+swagger: "2.0"
+info:
+  title: Yusuf Short Url
+  description: Yusuf Short Url
+  version: "1.0.1"
+host: example.com
+schemes:
+  - "https"
+produces:
+  - application/json
+securityDefinitions:
+  BasicAuth:
+    type: basic
+  ApiKeyAuth:
+    type: apiKey
+    in: header
+    name: X-API-Key
+  firebase:
+    authorizationUrl: ""
+    flow: "implicit"
+    type: "oauth2"
+    # Replace YOUR-PROJECT-ID with your project ID
+    x-google-issuer: "https://securetoken.google.com/stage-api"
+    x-google-jwks_uri: "https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+    x-google-audiences: "stage-api"
+paths:
+  /rest/v2/health:
+    get:
+      description: Check wheter api response or not
+      operationId: health
+      x-google-backend:
+        address: https://url-shortener-2yycsthcma-ew.a.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: Success
+          schema:
+            type: string
+        400:
+          description: API can not reponse properly
+  /rest/v2/short:
+    get:
+      description: get short url
+      operationId: shortUrl
+      x-google-backend:
+        address: https://url-shortener-2yycsthcma-ew.a.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+      security:
+        - ApiKeyAuth: []
+      responses:
+        200:
+          description: OK
+  /{keyword}:
+    get:
+      description: get long url
+      operationId: longUrl
+      x-google-backend:
+        address: https://url-shortener-2yycsthcma-ew.a.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+      parameters:
+        - in: path
+          name: keyword
+          type: string
+          required: true
+          description: string to get long url
+      responses:
+        200:
+          description: OK
